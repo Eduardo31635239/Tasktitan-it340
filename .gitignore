@@ -1,0 +1,12 @@
+# Node / backend
+node_modules/
+npm-debug.log
+api.log
+
+# OS / editor files
+.DS_Store
+*.swp
+*.swo
+
+# Logs
+*.log
