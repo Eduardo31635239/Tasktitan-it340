@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskTitan - Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: #020617;
+      border-bottom: 1px solid #1f2937;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .user-email {
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      padding: 8px 16px;
+      background: #374151;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: #4b5563;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .welcome {
+      margin-bottom: 40px;
+    }
+
+    .welcome h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #9ca3af;
+      font-size: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: #020617;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      border: 1px solid #1f2937;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: #cbd5e1;
+    }
+
+    .card p {
+      color: #9ca3af;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+
+    .badge.success {
+      background: rgba(74, 222, 128, 0.1);
+      color: #4ade80;
+      border: 1px solid rgba(74, 222, 128, 0.3);
+    }
+
+    .badge.warning {
+      background: rgba(251, 191, 36, 0.1);
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .milestone-section {
+      background: #020617;
+      border-radius: 16px;
+      padding: 32px;
+      border: 1px solid #1f2937;
+    }
+
+    .milestone-section h2 {
+      font-size: 24px;
+      margin-bottom: 24px;
+    }
+
+    .milestone {
+      background: #0f172a;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border-left: 4px solid #2563eb;
+    }
+
+    .milestone:last-child {
+      margin-bottom: 0;
+    }
+
+    .milestone h4 {
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #cbd5e1;
+    }
+
+    .milestone p {
+      color: #9ca3af;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .milestone-date {
+      color: #6b7280;
+      font-size: 12px;
+    }
+
+    .api-check {
+      margin-top: 24px;
+      padding: 20px;
+      background: #0f172a;
+      border-radius: 12px;
+    }
+
+    .api-check button {
+      padding: 10px 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 12px;
+    }
+
+    .api-check button:hover {
+      background: #1d4ed8;
+    }
+
+    .api-status {
+      background: #020617;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      color: #9ca3af;
+      font-family: monospace;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      border: 1px solid #1f2937;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>TaskTitan</h1>
+    <div class="user-info">
+      <span class="user-email" id="userEmail">Loading...</span>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="welcome">
+      <h2>Welcome to TaskTitan</h2>
+      <p>You're successfully authenticated! Milestone 2 complete.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Authentication Status</h3>
+        <p>You are currently signed in with a valid session. Your authentication is secured by Supabase.</p>
+        <span class="badge success">✓ Authenticated</span>
+      </div>
+
+      <div class="card">
+        <h3>Security Features</h3>
+        <p>Your password is securely hashed and stored. Sessions are managed with JWT tokens.</p>
+        <span class="badge success">✓ Secure</span>
+      </div>
+
+      <div class="card">
+        <h3>Next Steps</h3>
+        <p>Milestone 3 will add task management features with full CRUD operations and database integration.</p>
+        <span class="badge warning">Coming Soon</span>
+      </div>
+    </div>
+
+    <div class="milestone-section">
+      <h2>Project Milestones</h2>
+
+      <div class="milestone">
+        <h4>✓ Milestone 1: Front-End Completion</h4>
+        <p>Basic website layout and login page displayed.</p>
+        <span class="milestone-date">Completed: November 14th</span>
+      </div>
+
+      <div class="milestone" style="border-left-color: #4ade80;">
+        <h4>✓ Milestone 2: Authentication Completion</h4>
+        <p>User login system functionality with basic security.</p>
+        <span class="milestone-date">Due: December 5th</span>
+      </div>
+
+      <div class="milestone" style="border-left-color: #9ca3af;">
+        <h4>Milestone 3: Full Website Functionality</h4>
+        <p>Complete website with front-end, back-end, and database integration. Multi-factor authentication.</p>
+        <span class="milestone-date">Due: December 19th</span>
+      </div>
+
+      <div class="api-check">
+        <button id="checkApiBtn">Check Backend API Status</button>
+        <div class="api-status" id="apiStatus">Click button to check backend connection...</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getCurrentUser, signOut, getSession } from './lib/auth.js';
+
+    const userEmail = document.getElementById('userEmail');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const checkApiBtn = document.getElementById('checkApiBtn');
+    const apiStatus = document.getElementById('apiStatus');
+
+    async function loadUserInfo() {
+      try {
+        const session = await getSession();
+
+        if (!session) {
+          window.location.href = '/auth.html';
+          return;
+        }
+
+        const user = await getCurrentUser();
+        userEmail.textContent = user.email;
+      } catch (err) {
+        console.error('Error loading user:', err);
+        window.location.href = '/auth.html';
+      }
+    }
+
+    logoutBtn.addEventListener('click', async () => {
+      try {
+        await signOut();
+        window.location.href = '/auth.html';
+      } catch (err) {
+        console.error('Logout error:', err);
+        alert('Error logging out. Please try again.');
+      }
+    });
+
+    checkApiBtn.addEventListener('click', async () => {
+      apiStatus.textContent = 'Checking backend API...';
+      checkApiBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/', {
+          method: 'GET',
+        });
+
+        const text = await response.text();
+        apiStatus.textContent = `HTTP ${response.status} ${response.statusText}\n\n${text}`;
+      } catch (err) {
+        apiStatus.textContent = `Error: ${err.message}`;
+      } finally {
+        checkApiBtn.disabled = false;
+      }
+    });
+
+    loadUserInfo();
+  </script>
+</body>
+</html>
