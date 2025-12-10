@@ -2,327 +2,198 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TaskTitan - Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --bg: #0f0f19;
+      --card: #1a1a2e;
+      --text: #e2e8f0;
+      --primary: #6366f1;
+      --green: #10b981;
+      --danger: #ef4444;
+      --border: #334155;
     }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
+      background: linear-gradient(135deg, #0f0f19 0%, #1a1a2e 100%);
     }
-
-    .header {
-      background: #020617;
-      border-bottom: 1px solid #1f2937;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    header {
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
     }
-
-    .header h1 {
-      font-size: 24px;
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, #818cf8, #c084fc);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-weight: 700;
     }
-
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .user-email {
-      color: #9ca3af;
-      font-size: 14px;
-    }
-
-    .logout-btn {
-      padding: 8px 16px;
-      background: #374151;
+    .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+    .card { background: var(--card); border-radius: 1rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border: 1px solid var(--border); margin-bottom: 2rem; }
+    input, textarea, select {
+      width: 100%;
+      padding: 1rem;
+      margin: 0.75rem 0;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      background: #16213e;
       color: white;
+      font-size: 1rem;
+    }
+    button {
+      padding: 1rem 2rem;
+      border-radius: 0.75rem;
       border: none;
-      border-radius: 8px;
-      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.3s;
+      font-size: 1.1rem;
     }
-
-    .logout-btn:hover {
-      background: #4b5563;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 40px 24px;
-    }
-
-    .welcome {
-      margin-bottom: 40px;
-    }
-
-    .welcome h2 {
-      font-size: 32px;
-      margin-bottom: 8px;
-    }
-
-    .welcome p {
-      color: #9ca3af;
-      font-size: 16px;
-    }
-
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #4f46e5; transform: translateY(-2px); }
+    .btn-success { background: var(--green); color: white; }
+    .btn-logout { background: var(--danger); color: white; float: right; }
+    .btn-delete { background: var(--danger); padding: 0.5rem 1rem; font-size: 0.9rem; }
+    .msg { margin: 1rem 0; font-weight: 600; }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
     }
-
-    .card {
-      background: #020617;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-      border: 1px solid #1f2937;
+    .column {
+      background: var(--card);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
     }
-
-    .card h3 {
-      font-size: 18px;
-      margin-bottom: 12px;
-      color: #cbd5e1;
+    .column h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid;
     }
-
-    .card p {
-      color: #9ca3af;
-      font-size: 14px;
-      line-height: 1.6;
+    .todo h3 { border-color: #f87171; }
+    .progress h3 { border-color: #fbbf24; }
+    .done h3 { border-color: #34d399; }
+    .task {
+      background: rgba(255,255,255,0.05);
+      padding: 1rem;
+      margin: 0.75rem 0;
+      border-radius: 0.75rem;
+      border-left: 4px solid;
+      transition: all 0.3s;
+      cursor: grab;
     }
-
-    .badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-top: 12px;
-    }
-
-    .badge.success {
-      background: rgba(74, 222, 128, 0.1);
-      color: #4ade80;
-      border: 1px solid rgba(74, 222, 128, 0.3);
-    }
-
-    .badge.warning {
-      background: rgba(251, 191, 36, 0.1);
-      color: #fbbf24;
-      border: 1px solid rgba(251, 191, 36, 0.3);
-    }
-
-    .milestone-section {
-      background: #020617;
-      border-radius: 16px;
-      padding: 32px;
-      border: 1px solid #1f2937;
-    }
-
-    .milestone-section h2 {
-      font-size: 24px;
-      margin-bottom: 24px;
-    }
-
-    .milestone {
-      background: #0f172a;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 16px;
-      border-left: 4px solid #2563eb;
-    }
-
-    .milestone:last-child {
-      margin-bottom: 0;
-    }
-
-    .milestone h4 {
-      font-size: 16px;
-      margin-bottom: 8px;
-      color: #cbd5e1;
-    }
-
-    .milestone p {
-      color: #9ca3af;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .milestone-date {
-      color: #6b7280;
-      font-size: 12px;
-    }
-
-    .api-check {
-      margin-top: 24px;
-      padding: 20px;
-      background: #0f172a;
-      border-radius: 12px;
-    }
-
-    .api-check button {
-      padding: 10px 20px;
-      background: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-bottom: 12px;
-    }
-
-    .api-check button:hover {
-      background: #1d4ed8;
-    }
-
-    .api-status {
-      background: #020617;
-      border-radius: 8px;
-      padding: 12px;
-      font-size: 13px;
-      color: #9ca3af;
-      font-family: monospace;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      border: 1px solid #1f2937;
-    }
+    .task:active { cursor: grabbing; }
+    .task:hover { transform: translateX(8px); }
+    .task.todo { border-left-color: #f87171; }
+    .task.progress { border-left-color: #fbbf24; }
+    .task.done { border-left-color: #34d399; opacity: 0.8; }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <header class="header">
+  <header>
     <h1>TaskTitan</h1>
-    <div class="user-info">
-      <span class="user-email" id="userEmail">Loading...</span>
-      <button class="logout-btn" id="logoutBtn">Logout</button>
-    </div>
+    <p>Logged in as <strong id="user">User</strong> — <button class="btn-logout" onclick="logout()">Logout</button></p>
   </header>
 
   <div class="container">
-    <div class="welcome">
-      <h2>Welcome to TaskTitan</h2>
-      <p>You're successfully authenticated! Milestone 2 complete.</p>
+    <div class="card">
+      <h2>Add New Task</h2>
+      <input type="text" id="title" placeholder="Task title" />
+      <textarea id="desc" placeholder="Description (optional)" rows="2"></textarea>
+      <select id="status">
+        <option value="todo">To-Do</option>
+        <option value="progress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+      <button class="btn-primary" onclick="addTask()">+ Create Task</button>
     </div>
 
     <div class="grid">
-      <div class="card">
-        <h3>Authentication Status</h3>
-        <p>You are currently signed in with a valid session. Your authentication is secured by Supabase.</p>
-        <span class="badge success">✓ Authenticated</span>
-      </div>
-
-      <div class="card">
-        <h3>Security Features</h3>
-        <p>Your password is securely hashed and stored. Sessions are managed with JWT tokens.</p>
-        <span class="badge success">✓ Secure</span>
-      </div>
-
-      <div class="card">
-        <h3>Next Steps</h3>
-        <p>Milestone 3 will add task management features with full CRUD operations and database integration.</p>
-        <span class="badge warning">Coming Soon</span>
-      </div>
-    </div>
-
-    <div class="milestone-section">
-      <h2>Project Milestones</h2>
-
-      <div class="milestone">
-        <h4>✓ Milestone 1: Front-End Completion</h4>
-        <p>Basic website layout and login page displayed.</p>
-        <span class="milestone-date">Completed: November 14th</span>
-      </div>
-
-      <div class="milestone" style="border-left-color: #4ade80;">
-        <h4>✓ Milestone 2: Authentication Completion</h4>
-        <p>User login system functionality with basic security.</p>
-        <span class="milestone-date">Due: December 5th</span>
-      </div>
-
-      <div class="milestone" style="border-left-color: #9ca3af;">
-        <h4>Milestone 3: Full Website Functionality</h4>
-        <p>Complete website with front-end, back-end, and database integration. Multi-factor authentication.</p>
-        <span class="milestone-date">Due: December 19th</span>
-      </div>
-
-      <div class="api-check">
-        <button id="checkApiBtn">Check Backend API Status</button>
-        <div class="api-status" id="apiStatus">Click button to check backend connection...</div>
-      </div>
+      <div class="column todo"><h3>📌 To-Do</h3><div id="todo" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
+      <div class="column progress"><h3>🔄 In Progress</h3><div id="progress" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
+      <div class="column done"><h3>✅ Done</h3><div id="done" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
     </div>
   </div>
 
-  <script type="module">
-    import { getCurrentUser, signOut, getSession } from './lib/auth.js';
+  <script>
+    const userEl = document.getElementById('user');
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    const currentUser = localStorage.getItem('current_user');
 
-    const userEmail = document.getElementById('userEmail');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const checkApiBtn = document.getElementById('checkApiBtn');
-    const apiStatus = document.getElementById('apiStatus');
+    userEl.textContent = currentUser || 'Guest';
 
-    async function loadUserInfo() {
-      try {
-        const session = await getSession();
+    if (!currentUser) {
+      window.location.href = 'index.html';
+    }
 
-        if (!session) {
-          window.location.href = '/auth.html';
-          return;
-        }
+    renderTasks();
 
-        const user = await getCurrentUser();
-        userEmail.textContent = user.email;
-      } catch (err) {
-        console.error('Error loading user:', err);
-        window.location.href = '/auth.html';
+    function addTask() {
+      const title = document.getElementById('title').value.trim();
+      const desc = document.getElementById('desc').value;
+      const status = document.getElementById('status').value;
+
+      if (!title) return;
+
+      tasks.push({ id: Date.now(), title, desc, status });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      document.getElementById('title').value = '';
+      document.getElementById('desc').value = '';
+      renderTasks();
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    function renderTasks() {
+      ['todo','progress','done'].forEach(s => document.getElementById(s).innerHTML = '');
+      tasks.forEach(t => {
+        const div = document.createElement('div');
+        div.className = `task ${t.status}`;
+        div.draggable = true;
+        div.ondragstart = (e) => e.dataTransfer.setData('text', t.id);
+        div.innerHTML = `
+          <strong>${t.title}</strong><br>
+          <small>${t.desc || ''}</small>
+          <button class="btn-delete" onclick="deleteTask(${t.id})">Delete</button>
+        `;
+        document.getElementById(t.status).appendChild(div);
+      });
+    }
+
+    function allowDrop(e) { e.preventDefault(); }
+    function drop(e) {
+      e.preventDefault();
+      const id = e.dataTransfer.getData('text');
+      const task = tasks.find(t => t.id == id);
+      if (task) {
+        task.status = e.target.closest('.column').querySelector('div[id]').id;
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        renderTasks();
       }
     }
 
-    logoutBtn.addEventListener('click', async () => {
-      try {
-        await signOut();
-        window.location.href = '/auth.html';
-      } catch (err) {
-        console.error('Logout error:', err);
-        alert('Error logging out. Please try again.');
-      }
-    });
-
-    checkApiBtn.addEventListener('click', async () => {
-      apiStatus.textContent = 'Checking backend API...';
-      checkApiBtn.disabled = true;
-
-      try {
-        const response = await fetch('/api/', {
-          method: 'GET',
-        });
-
-        const text = await response.text();
-        apiStatus.textContent = `HTTP ${response.status} ${response.statusText}\n\n${text}`;
-      } catch (err) {
-        apiStatus.textContent = `Error: ${err.message}`;
-      } finally {
-        checkApiBtn.disabled = false;
-      }
-    });
-
-    loadUserInfo();
+    function logout() {
+      localStorage.removeItem('current_user');
+      window.location.href = 'index.html';
+    }
   </script>
 </body>
 </html>

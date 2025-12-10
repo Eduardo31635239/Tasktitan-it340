@@ -3,118 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TaskTitan - Login</title>
+  <title>TaskTitan — Crush your to-dos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { margin:0; font-family: Arial; background: #121212; color: white; height: 100vh; display: flex; justify-content: center; align-items: center; }
-    .box { background: #1e1e1e; padding: 50px; border-radius: 16px; width: 400px; text-align: center; box-shadow: 0 0 30px rgba(0,123,255,0.4); }
-    h1 { color: #007bff; }
-    input { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: none; font-size: 1rem; }
-    button { width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; }
-    .login { background: #007bff; color: white; }
-    .login:hover { background: #0056b3; }
-    .signup { background: #28a745; color: white; }
-    .signup:hover { background: #218838; }
-    .msg { margin-top: 20px; font-size: 1.2rem; }
-    .dashboard { display: none; }
-    .logout { background: #dc3545; margin-top: 30px; }
+    :root { --bg: #0a0e17; --card: #121826; --text: #e2e8f0; --primary: #00d4ff; --green: #00ffa3; --border: #1e2a44; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; background: linear-gradient(135deg, #0a0e17 0%, #16213a 100%); }
+    header { padding: 2rem 5%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 100; }
+    .logo { display: flex; align-items: center; gap: 12px; font-size: 1.8rem; font-weight: 700; }
+    .logo span { background: linear-gradient(90deg, #00ffa3, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    nav a { color: #94a3b8; margin: 0 1.5rem; text-decoration: none; font-weight: 500; }
+    .btn-signin { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); padding: 10px 24px; border-radius: 50px; font-weight: 600; cursor: pointer; }
+    .hero { padding: 12rem 5% 8rem; display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; gap: 4rem; }
+    .hero-text h1 { font-size: 5rem; line-height: 1.1; margin-bottom: 1.5rem; background: linear-gradient(90deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-text p { font-size: 1.4rem; line-height: 1.6; margin-bottom: 2.5rem; max-width: 600px; opacity: 0.9; }
+    .email-box { display: flex; gap: 1rem; max-width: 500px; }
+    .email-box input { flex: 1; padding: 1.2rem 1.5rem; border-radius: 50px; border: none; background: #1e2a44; color: white; font-size: 1.1rem; }
+    .btn-started { background: var(--green); color: black; padding: 1.2rem 2.5rem; border-radius: 50px; font-weight: 700; cursor: pointer; }
+    .btn-started:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,255,163,0.4); }
+    .tasks-preview { background: var(--card); padding: 2.5rem; border-radius: 24px; width: 420px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+    .tasks-preview h3 { font-size: 1.6rem; margin-bottom: 1.5rem; color: var(--primary); }
+    .task-item { background: rgba(255,255,255,0.05); padding: 1rem 1.2rem; margin: 0.8rem 0; border-radius: 16px; display: flex; align-items: center; gap: 1rem; }
+    .task-item .circle { width: 24px; height: 24px; border-radius: 50%; border: 3px solid; }
+    .task-item.done .circle { background: var(--green); border-color: var(--green); }
+    .task-item .text { flex: 1; font-size: 1.1rem; }
+    .add-task { margin-top: 1.5rem; padding: 1rem; background: rgba(0,212,255,0.1); border: 2px dashed var(--primary); border-radius: 16px; text-align: center; color: var(--primary); font-weight: 600; }
   </style>
 </head>
 <body>
-  <div class="box">
-    <h1>TaskTitan</h1>
-    <p id="title">Demo Login & Sign Up</p>
+  <header>
+    <div class="logo">
+      <div style="width:40px;height:40px;background:linear-gradient(135deg,#00ffa3,#00d4ff);border-radius:12px;"></div>
+      <span>TaskTitan</span>
+    </div>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Features</a>
+      <button class="btn-signin" onclick="window.location.href='login.html'">Sign In</button>
+    </nav>
+  </header>
 
-    <div id="auth">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="pass" placeholder="Password" required />
-      <button class="login" onclick="login()">Login</button>
-      <button class="signup" onclick="signup()">Create Account</button>
-      <p class="msg" id="msg"></p>
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Crush your<br>to-dos</h1>
+      <p>Task Titan is the ultimate task management app, helping you conquer your to-do list with ease.</p>
+      <div class="email-box">
+        <input type="email" placeholder="Enter your email" />
+        <button class="btn-started" onclick="window.location.href='signup.html'">Get Started</button>
+      </div>
     </div>
 
-    <div id="dashboard" class="dashboard">
-      <h2>Welcome!</h2>
-      <p>You are logged in as <strong id="user"></strong></p>
-      <p>This is your protected dashboard</p>
-      <button class="logout" onclick="logout()">Logout</button>
+    <div class="tasks-preview">
+      <h3>Tasks</h3>
+      <div class="task-item done">
+        <div class="circle"></div>
+        <div class="text">Design new logo</div>
+      </div>
+      <div class="task-item">
+        <div class="circle"></div>
+        <div class="text">Write blog post</div>
+      </div>
+      <div class="task-item">
+        <div class="circle"></div>
+        <div class="text">Update website</div>
+      </div>
+      <div class="task-item">
+        <div class="circle"></div>
+        <div class="text">Plan team meeting</div>
+      </div>
+      <div class="add-task">+ Add Task</div>
     </div>
   </div>
-
-  <script>
-    // Load users from localStorage (or start with demo user)
-    let users = JSON.parse(localStorage.getItem('tasktitan_users') || '[]');
-    if (users.length === 0) {
-      users.push({ email: "admin@example.com", password: "123456" });
-      localStorage.setItem('tasktitan_users', JSON.stringify(users));
-    }
-
-    // Check if already logged in
-    if (localStorage.getItem('current_user')) {
-      showDashboard();
-    }
-
-    function login() {
-      const email = document.getElementById('email').value.trim();
-      const pass = document.getElementById('pass').value;
-      const msg = document.getElementById('msg');
-
-      if (!email || !pass) {
-        msg.style.color = '#ff4444';
-        msg.textContent = 'Please fill both fields';
-        return;
-      }
-
-      const user = users.find(u => u.email === email && u.password === pass);
-      if (user) {
-        localStorage.setItem('current_user', email);
-        msg.style.color = '#0f0';
-        msg.textContent = 'Login successful!';
-        setTimeout(showDashboard, 800);
-      } else {
-        msg.style.color = '#ff4444';
-        msg.textContent = 'Wrong email or password';
-      }
-    }
-
-    function signup() {
-      const email = document.getElementById('email').value.trim();
-      const pass = document.getElementById('pass').value;
-      const msg = document.getElementById('msg');
-
-      if (!email || !pass) {
-        msg.style.color = '#ff4444';
-        msg.textContent = 'Please fill both fields';
-        return;
-      }
-
-      if (users.find(u => u.email === email)) {
-        msg.style.color = '#ff4444';
-        msg.textContent = 'Email already exists';
-        return;
-      }
-
-      users.push({ email, password: pass });
-      localStorage.setItem('tasktitan_users', JSON.stringify(users));
-      msg.style.color = '#0f0';
-      msg.textContent = 'Account created! You can now log in.';
-    }
-
-    function showDashboard() {
-      document.getElementById('auth').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
-      document.getElementById('user').textContent = localStorage.getItem('current_user');
-      document.getElementById('title').textContent = 'Dashboard';
-    }
-
-    function logout() {
-      localStorage.removeItem('current_user');
-      document.getElementById('auth').style.display = 'block';
-      document.getElementById('dashboard').style.display = 'none';
-      document.getElementById('msg').textContent = '';
-      document.getElementById('title').textContent = 'Demo Login & Sign Up';
-      document.getElementById('email').value = '';
-      document.getElementById('pass').value = '';
-    }
-  </script>
 </body>
 </html>
