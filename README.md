@@ -6,6 +6,3 @@
 - Access from browser: http://72.79.118.237/ -> returns JSON
 - Live endpoints: /api/auth/login and /api/tasks working
 
-AI Usage: Grok helped debug network and create minimal wokring server.
-
-Trello board: all cards moved to Done.
