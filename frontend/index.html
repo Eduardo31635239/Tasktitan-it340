@@ -2,84 +2,119 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TaskTitan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskTitan - Login</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #e5e7eb;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .loader {
-      text-align: center;
-    }
-
-    .spinner {
-      width: 48px;
-      height: 48px;
-      border: 4px solid #1f2937;
-      border-top-color: #2563eb;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    h1 {
-      font-size: 32px;
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 8px;
-    }
-
-    p {
-      color: #9ca3af;
-      font-size: 14px;
-    }
+    body { margin:0; font-family: Arial; background: #121212; color: white; height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .box { background: #1e1e1e; padding: 50px; border-radius: 16px; width: 400px; text-align: center; box-shadow: 0 0 30px rgba(0,123,255,0.4); }
+    h1 { color: #007bff; }
+    input { width: 100%; padding: 14px; margin: 10px 0; border-radius: 8px; border: none; font-size: 1rem; }
+    button { width: 100%; padding: 16px; margin: 10px 0; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; }
+    .login { background: #007bff; color: white; }
+    .login:hover { background: #0056b3; }
+    .signup { background: #28a745; color: white; }
+    .signup:hover { background: #218838; }
+    .msg { margin-top: 20px; font-size: 1.2rem; }
+    .dashboard { display: none; }
+    .logout { background: #dc3545; margin-top: 30px; }
   </style>
 </head>
 <body>
-  <div class="loader">
-    <div class="spinner"></div>
+  <div class="box">
     <h1>TaskTitan</h1>
-    <p>Loading...</p>
+    <p id="title">Demo Login & Sign Up</p>
+
+    <div id="auth">
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="pass" placeholder="Password" required />
+      <button class="login" onclick="login()">Login</button>
+      <button class="signup" onclick="signup()">Create Account</button>
+      <p class="msg" id="msg"></p>
+    </div>
+
+    <div id="dashboard" class="dashboard">
+      <h2>Welcome!</h2>
+      <p>You are logged in as <strong id="user"></strong></p>
+      <p>This is your protected dashboard</p>
+      <button class="logout" onclick="logout()">Logout</button>
+    </div>
   </div>
 
-  <script type="module">
-    import { getSession } from './lib/auth.js';
+  <script>
+    // Load users from localStorage (or start with demo user)
+    let users = JSON.parse(localStorage.getItem('tasktitan_users') || '[]');
+    if (users.length === 0) {
+      users.push({ email: "admin@example.com", password: "123456" });
+      localStorage.setItem('tasktitan_users', JSON.stringify(users));
+    }
 
-    async function checkAuth() {
-      try {
-        const session = await getSession();
+    // Check if already logged in
+    if (localStorage.getItem('current_user')) {
+      showDashboard();
+    }
 
-        if (session) {
-          window.location.href = '/dashboard.html';
-        } else {
-          window.location.href = '/auth.html';
-        }
-      } catch (err) {
-        console.error('Auth check error:', err);
-        window.location.href = '/auth.html';
+    function login() {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('pass').value;
+      const msg = document.getElementById('msg');
+
+      if (!email || !pass) {
+        msg.style.color = '#ff4444';
+        msg.textContent = 'Please fill both fields';
+        return;
+      }
+
+      const user = users.find(u => u.email === email && u.password === pass);
+      if (user) {
+        localStorage.setItem('current_user', email);
+        msg.style.color = '#0f0';
+        msg.textContent = 'Login successful!';
+        setTimeout(showDashboard, 800);
+      } else {
+        msg.style.color = '#ff4444';
+        msg.textContent = 'Wrong email or password';
       }
     }
 
-    checkAuth();
+    function signup() {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('pass').value;
+      const msg = document.getElementById('msg');
+
+      if (!email || !pass) {
+        msg.style.color = '#ff4444';
+        msg.textContent = 'Please fill both fields';
+        return;
+      }
+
+      if (users.find(u => u.email === email)) {
+        msg.style.color = '#ff4444';
+        msg.textContent = 'Email already exists';
+        return;
+      }
+
+      users.push({ email, password: pass });
+      localStorage.setItem('tasktitan_users', JSON.stringify(users));
+      msg.style.color = '#0f0';
+      msg.textContent = 'Account created! You can now log in.';
+    }
+
+    function showDashboard() {
+      document.getElementById('auth').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('user').textContent = localStorage.getItem('current_user');
+      document.getElementById('title').textContent = 'Dashboard';
+    }
+
+    function logout() {
+      localStorage.removeItem('current_user');
+      document.getElementById('auth').style.display = 'block';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('msg').textContent = '';
+      document.getElementById('title').textContent = 'Demo Login & Sign Up';
+      document.getElementById('email').value = '';
+      document.getElementById('pass').value = '';
+    }
   </script>
 </body>
 </html>

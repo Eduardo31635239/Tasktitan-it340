@@ -1,329 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TaskTitan - Login</title>
+  <meta charset="utf-8">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #e5e7eb;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .auth-container {
-      background: #020617;
-      border-radius: 20px;
-      padding: 40px;
-      max-width: 440px;
-      width: 100%;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
-      border: 1px solid #1f2937;
-    }
-
-    .logo {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .logo h1 {
-      font-size: 32px;
-      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 8px;
-    }
-
-    .logo p {
-      color: #9ca3af;
-      font-size: 14px;
-    }
-
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-      background: #0f172a;
-      padding: 4px;
-      border-radius: 12px;
-    }
-
-    .tab {
-      flex: 1;
-      padding: 10px;
-      background: transparent;
-      border: none;
-      color: #9ca3af;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      border-radius: 8px;
-      transition: all 0.2s;
-    }
-
-    .tab.active {
-      background: #2563eb;
-      color: white;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 8px;
-      color: #cbd5e1;
-      font-weight: 500;
-    }
-
-    input {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 1px solid #374151;
-      background: #0f172a;
-      color: #e5e7eb;
-      font-size: 14px;
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    input:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-    }
-
-    .submit-btn {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .submit-btn:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
-    }
-
-    .submit-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .message {
-      margin-top: 16px;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      text-align: center;
-      display: none;
-    }
-
-    .message.success {
-      background: rgba(74, 222, 128, 0.1);
-      border: 1px solid rgba(74, 222, 128, 0.3);
-      color: #4ade80;
-      display: block;
-    }
-
-    .message.error {
-      background: rgba(248, 113, 113, 0.1);
-      border: 1px solid rgba(248, 113, 113, 0.3);
-      color: #f87171;
-      display: block;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .info-text {
-      font-size: 12px;
-      color: #6b7280;
-      margin-top: 12px;
-      text-align: center;
-    }
+    body { font-family: Arial; background: #121212; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .box { background: #1e1e1e; padding: 50px; border-radius: 15px; width: 380px; text-align: center; box-shadow: 0 0 20px rgba(0,123,255,0.3); }
+    h1 { color: #007bff; margin-bottom: 10px; }
+    input { width: 100%; padding: 14px; margin: 12px 0; border-radius: 8px; border: none; font-size: 1rem; }
+    button { width: 100%; padding: 16px; background: #007bff; color: white; border: none; border-radius: 8px; font-size: 1.2rem; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #0056b3; }
+    .msg { margin-top: 20px; font-size: 1.1rem; color: #0f0; }
   </style>
 </head>
 <body>
-  <div class="auth-container">
-    <div class="logo">
-      <h1>TaskTitan</h1>
-      <p>Simple task management for students and teams</p>
-    </div>
-
-    <div class="tabs">
-      <button class="tab active" data-tab="login">Login</button>
-      <button class="tab" data-tab="signup">Sign Up</button>
-    </div>
-
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="loginEmail">Email</label>
-        <input type="email" id="loginEmail" placeholder="student@example.com" required />
-      </div>
-
-      <div class="form-group">
-        <label for="loginPassword">Password</label>
-        <input type="password" id="loginPassword" placeholder="••••••••" required />
-      </div>
-
-      <button type="submit" class="submit-btn" id="loginBtn">Sign In</button>
-
-      <div id="loginMessage" class="message"></div>
-    </form>
-
-    <form id="signupForm" class="hidden">
-      <div class="form-group">
-        <label for="signupEmail">Email</label>
-        <input type="email" id="signupEmail" placeholder="student@example.com" required />
-      </div>
-
-      <div class="form-group">
-        <label for="signupPassword">Password</label>
-        <input type="password" id="signupPassword" placeholder="••••••••" minlength="6" required />
-      </div>
-
-      <div class="form-group">
-        <label for="signupPasswordConfirm">Confirm Password</label>
-        <input type="password" id="signupPasswordConfirm" placeholder="••••••••" minlength="6" required />
-      </div>
-
-      <button type="submit" class="submit-btn" id="signupBtn">Create Account</button>
-
-      <div id="signupMessage" class="message"></div>
-
-      <p class="info-text">Password must be at least 6 characters</p>
-    </form>
+  <div class="box">
+    <h1>TaskTitan</h1>
+    <p>Demo Login for Milestone 2</p>
+    <input type="email" id="email" placeholder="Enter any email" required />
+    <input type="password" id="pass" placeholder="Enter any password" required />
+    <button onclick="login()">Login Now</button>
+    <p class="msg" id="msg"></p>
   </div>
 
-  <script type="module">
-    import { signIn, signUp, getSession } from './lib/auth.js';
-
-    const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
-    const loginMessage = document.getElementById('loginMessage');
-    const signupMessage = document.getElementById('signupMessage');
-    const tabs = document.querySelectorAll('.tab');
-
-    async function checkAuth() {
-      try {
-        const session = await getSession();
-        if (session) {
-          window.location.href = '/dashboard.html';
-        }
-      } catch (err) {
-        console.error('Auth check error:', err);
+  <script>
+    function login() {
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('pass').value;
+      
+      if (email && pass) {
+        // Fake secure token
+        localStorage.setItem('token', btoa(email + ':' + Date.now()));
+        document.getElementById('msg').style.color = '#0f0';
+        document.getElementById('msg').textContent = 'Login successful! Redirecting...';
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 800);
+      } else {
+        document.getElementById('msg').style.color = '#f66';
+        document.getElementById('msg').textContent = 'Please fill both fields';
       }
     }
-
-    checkAuth();
-
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const tabName = tab.dataset.tab;
-
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-
-        if (tabName === 'login') {
-          loginForm.classList.remove('hidden');
-          signupForm.classList.add('hidden');
-          loginMessage.className = 'message';
-          loginMessage.textContent = '';
-        } else {
-          loginForm.classList.add('hidden');
-          signupForm.classList.remove('hidden');
-          signupMessage.className = 'message';
-          signupMessage.textContent = '';
-        }
-      });
-    });
-
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginBtn');
-
-      btn.disabled = true;
-      btn.textContent = 'Signing in...';
-      loginMessage.className = 'message';
-      loginMessage.textContent = '';
-
-      try {
-        await signIn(email, password);
-        loginMessage.className = 'message success';
-        loginMessage.textContent = 'Login successful! Redirecting...';
-
-        setTimeout(() => {
-          window.location.href = '/dashboard.html';
-        }, 500);
-      } catch (err) {
-        loginMessage.className = 'message error';
-        loginMessage.textContent = err.message || 'Login failed. Please check your credentials.';
-        btn.disabled = false;
-        btn.textContent = 'Sign In';
-      }
-    });
-
-    signupForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const email = document.getElementById('signupEmail').value.trim();
-      const password = document.getElementById('signupPassword').value;
-      const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
-      const btn = document.getElementById('signupBtn');
-
-      if (password !== passwordConfirm) {
-        signupMessage.className = 'message error';
-        signupMessage.textContent = 'Passwords do not match.';
-        return;
-      }
-
-      btn.disabled = true;
-      btn.textContent = 'Creating account...';
-      signupMessage.className = 'message';
-      signupMessage.textContent = '';
-
-      try {
-        await signUp(email, password);
-        signupMessage.className = 'message success';
-        signupMessage.textContent = 'Account created! You can now log in.';
-
-        setTimeout(() => {
-          tabs[0].click();
-          signupForm.reset();
-        }, 1500);
-      } catch (err) {
-        signupMessage.className = 'message error';
-        signupMessage.textContent = err.message || 'Signup failed. Please try again.';
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Create Account';
-      }
-    });
   </script>
 </body>
 </html>
