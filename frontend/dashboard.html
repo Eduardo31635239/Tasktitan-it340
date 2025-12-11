@@ -41,47 +41,24 @@
     .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
     .card { background: var(--card); border-radius: 1rem; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border: 1px solid var(--border); margin-bottom: 2rem; }
     input, textarea, select {
-      width: 100%;
-      padding: 1rem;
-      margin: 0.75rem 0;
-      border-radius: 0.75rem;
-      border: 1px solid var(--border);
-      background: #16213e;
-      color: white;
-      font-size: 1rem;
+      width: 100%; padding: 1rem; margin: 0.75rem 0; border-radius: 0.75rem; border: 1px solid var(--border);
+      background: #16213e; color: white; font-size: 1rem;
     }
     button {
-      padding: 1rem 2rem;
-      border-radius: 0.75rem;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-size: 1.1rem;
+      padding: 1rem 2rem; border-radius: 0.75rem; border: none; font-weight: 600; cursor: pointer;
+      transition: all 0.3s; font-size: 1.1rem;
     }
     .btn-primary { background: var(--primary); color: white; }
     .btn-primary:hover { background: #4f46e5; transform: translateY(-2px); }
     .btn-success { background: var(--green); color: white; }
     .btn-logout { background: var(--danger); color: white; float: right; }
     .btn-delete { background: var(--danger); padding: 0.5rem 1rem; font-size: 0.9rem; }
-    .msg { margin: 1rem 0; font-weight: 600; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
     .column {
-      background: var(--card);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      border: 1px solid var(--border);
+      background: var(--card); border-radius: 1rem; padding: 1.5rem; border: 1px solid var(--border);
     }
     .column h3 {
-      font-size: 1.4rem;
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid;
+      font-size: 1.4rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid;
     }
     .todo h3 { border-color: #f87171; }
     .progress h3 { border-color: #fbbf24; }
@@ -94,19 +71,21 @@
       border-left: 4px solid;
       transition: all 0.3s;
       cursor: grab;
+      user-select: none;
     }
-    .task:active { cursor: grabbing; }
     .task:hover { transform: translateX(8px); }
+    .task:active { cursor: grabbing; opacity: 0.8; }
     .task.todo { border-left-color: #f87171; }
     .task.progress { border-left-color: #fbbf24; }
     .task.done { border-left-color: #34d399; opacity: 0.8; }
+    .dropzone { min-height: 100px; }
     .hidden { display: none; }
   </style>
 </head>
 <body>
   <header>
     <h1>TaskTitan</h1>
-    <p>Logged in as <strong id="user">User</strong> — <button class="btn-logout" onclick="logout()">Logout</button></p>
+    <p>Logged in as <strong id="user">Guest</strong> — <button class="btn-logout" onclick="logout()">Logout</button></p>
   </header>
 
   <div class="container">
@@ -123,32 +102,23 @@
     </div>
 
     <div class="grid">
-      <div class="column todo"><h3>📌 To-Do</h3><div id="todo" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
-      <div class="column progress"><h3>🔄 In Progress</h3><div id="progress" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
-      <div class="column done"><h3>✅ Done</h3><div id="done" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
+      <div class="column todo"><h3>📌 To-Do</h3><div id="todo" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
+      <div class="column progress"><h3>🔄 In Progress</h3><div id="progress" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
+      <div class="column done"><h3>✅ Done</h3><div id="done" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
     </div>
   </div>
 
   <script>
-    const userEl = document.getElementById('user');
+    document.getElementById('user').textContent = localStorage.getItem('current_user') || 'Guest';
+
     let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    const currentUser = localStorage.getItem('current_user');
-
-    userEl.textContent = currentUser || 'Guest';
-
-    if (!currentUser) {
-      window.location.href = 'index.html';
-    }
-
     renderTasks();
 
     function addTask() {
       const title = document.getElementById('title').value.trim();
       const desc = document.getElementById('desc').value;
       const status = document.getElementById('status').value;
-
-      if (!title) return;
-
+      if (!title) return alert('Please enter a title');
       tasks.push({ id: Date.now(), title, desc, status });
       localStorage.setItem('tasks', JSON.stringify(tasks));
       document.getElementById('title').value = '';
@@ -168,7 +138,8 @@
         const div = document.createElement('div');
         div.className = `task ${t.status}`;
         div.draggable = true;
-        div.ondragstart = (e) => e.dataTransfer.setData('text', t.id);
+        div.id = 'task-' + t.id;
+        div.ondragstart = e => e.dataTransfer.setData('text/plain', t.id);
         div.innerHTML = `
           <strong>${t.title}</strong><br>
           <small>${t.desc || ''}</small>
@@ -179,19 +150,25 @@
     }
 
     function allowDrop(e) { e.preventDefault(); }
+
     function drop(e) {
       e.preventDefault();
-      const id = e.dataTransfer.getData('text');
-      const task = tasks.find(t => t.id == id);
-      if (task) {
-        task.status = e.target.closest('.column').querySelector('div[id]').id;
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-        renderTasks();
-      }
+      const id = parseInt(e.dataTransfer.getData('text/plain'));
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+      const newStatus = e.target.closest('.column').querySelector('.dropzone').id;
+      task.status = newStatus;
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
     }
 
     function logout() {
       localStorage.removeItem('current_user');
+      window.location.href = 'index.html';
+    }
+
+    // Protect page
+    if (!localStorage.getItem('current_user')) {
       window.location.href = 'index.html';
     }
   </script>
