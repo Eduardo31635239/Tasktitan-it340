@@ -3,76 +3,290 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TaskTitan — Crush your to-dos</title>
+  <title>TaskTitan — Premium Task Manager</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #0a0e17; --card: #121826; --text: #e2e8f0; --primary: #00d4ff; --green: #00ffa3; --border: #1e2a44; }
+    :root {
+      --bg: #0f0f19;
+      --card: #1a1a2e;
+      --text: #e2e8f0;
+      --primary: #6366f1;
+      --success: #10b981;
+      --danger: #ef4444;
+      --border: #334155;
+    }
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; background: linear-gradient(135deg, #0a0e17 0%, #16213a 100%); }
-    header { padding: 2rem 5%; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 100; }
-    .logo { display: flex; align-items: center; gap: 12px; font-size: 1.8rem; font-weight: 700; }
-    .logo span { background: linear-gradient(90deg, #00ffa3, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    nav a { color: #94a3b8; margin: 0 1.5rem; text-decoration: none; font-weight: 500; }
-    .btn-signin { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); padding: 10px 24px; border-radius: 50px; font-weight: 600; cursor: pointer; }
-    .hero { padding: 12rem 5% 8rem; display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; gap: 4rem; }
-    .hero-text h1 { font-size: 5rem; line-height: 1.1; margin-bottom: 1.5rem; background: linear-gradient(90deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero-text p { font-size: 1.4rem; line-height: 1.6; margin-bottom: 2.5rem; max-width: 600px; opacity: 0.9; }
-    .email-box { display: flex; gap: 1rem; max-width: 500px; }
-    .email-box input { flex: 1; padding: 1.2rem 1.5rem; border-radius: 50px; border: none; background: #1e2a44; color: white; font-size: 1.1rem; }
-    .btn-started { background: var(--green); color: black; padding: 1.2rem 2.5rem; border-radius: 50px; font-weight: 700; cursor: pointer; }
-    .btn-started:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,255,163,0.4); }
-    .tasks-preview { background: var(--card); padding: 2.5rem; border-radius: 24px; width: 420px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
-    .tasks-preview h3 { font-size: 1.6rem; margin-bottom: 1.5rem; color: var(--primary); }
-    .task-item { background: rgba(255,255,255,0.05); padding: 1rem 1.2rem; margin: 0.8rem 0; border-radius: 16px; display: flex; align-items: center; gap: 1rem; }
-    .task-item .circle { width: 24px; height: 24px; border-radius: 50%; border: 3px solid; }
-    .task-item.done .circle { background: var(--green); border-color: var(--green); }
-    .task-item .text { flex: 1; font-size: 1.1rem; }
-    .add-task { margin-top: 1.5rem; padding: 1rem; background: rgba(0,212,255,0.1); border: 2px dashed var(--primary); border-radius: 16px; text-align: center; color: var(--primary); font-weight: 600; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f0f19 0%, #1a1a2e 100%);
+    }
+    header {
+      background: rgba(26,26,46,0.95);
+      backdrop-filter: blur(10px);
+      padding: 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
+    }
+    h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+    .container { max-width: 1200px; margin: 2rem auto; padding: 0 1.5rem; }
+    .auth-card, .task-card {
+      background: var(--card);
+      border-radius: 1rem;
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 1rem;
+      margin: 0.75rem 0;
+      border-radius: 0.75rem;
+      border: 1px solid var(--border);
+      background: #16213e;
+      color: white;
+      font-size: 1rem;
+    }
+    button {
+      padding: 1rem 2rem;
+      border-radius: 0.75rem;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1.1rem;
+    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: #4f46e5; transform: translateY(-2px); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #059669; }
+    .btn-logout { background: var(--danger); color: white; float: right; }
+    .btn-delete { background: var(--danger); padding: 0.5rem 1rem; font-size: 0.9rem; }
+    .msg { margin: 1rem 0; font-weight: 600; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .column {
+      background: var(--card);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+    }
+    .column h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid;
+    }
+    .todo h3 { border-color: #f87171; }
+    .progress h3 { border-color: #fbbf24; }
+    .done h3 { border-color: #34d399; }
+    .task {
+      background: rgba(255,255,255,0.05);
+      padding: 1rem;
+      margin: 0.75rem 0;
+      border-radius: 0.75rem;
+      border-left: 4px solid;
+      transition: all 0.3s;
+      cursor: grab;
+    }
+    .task:hover { transform: translateX(8px); }
+    .task:active { cursor: grabbing; }
+    .task.todo { border-left-color: #f87171; }
+    .task.progress { border-left-color: #fbbf24; }
+    .task.done { border-left-color: #34d399; opacity: 0.8; }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
   <header>
-    <div class="logo">
-      <div style="width:40px;height:40px;background:linear-gradient(135deg,#00ffa3,#00d4ff);border-radius:12px;"></div>
-      <span>TaskTitan</span>
-    </div>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Features</a>
-      <button class="btn-signin" onclick="window.location.href='login.html'">Sign In</button>
-    </nav>
+    <h1>TaskTitan</h1>
+    <p id="user-display" style="margin-top:0.5rem; opacity:0.9;">Premium Task Manager</p>
   </header>
 
-  <div class="hero">
-    <div class="hero-text">
-      <h1>Crush your<br>to-dos</h1>
-      <p>Task Titan is the ultimate task management app, helping you conquer your to-do list with ease.</p>
-      <div class="email-box">
-        <input type="email" placeholder="Enter your email" />
-        <button class="btn-started" onclick="window.location.href='signup.html'">Get Started</button>
+  <div class="container">
+    <!-- AUTH -->
+    <div id="auth" class="auth-card">
+      <h2 style="text-align:center; margin-bottom:1.5rem;">Welcome to TaskTitan</h2>
+      <input type="email" id="email" placeholder="Email address" />
+      <input type="password" id="pass" placeholder="Password" />
+      <div style="display:flex; gap:1rem;">
+        <button class="btn-primary" onclick="login()" style="flex:1;">Login</button>
+        <button class="btn-success" onclick="signup()" style="flex:1;">Create Account</button>
       </div>
+      <p class="msg" id="msg"></p>
     </div>
 
-    <div class="tasks-preview">
-      <h3>Tasks</h3>
-      <div class="task-item done">
-        <div class="circle"></div>
-        <div class="text">Design new logo</div>
+    <!-- MAIN APP -->
+    <div id="app" class="hidden">
+      <div style="text-align:right; margin-bottom:1rem;">
+        <button class="btn-logout" onclick="logout()">Logout</button>
       </div>
-      <div class="task-item">
-        <div class="circle"></div>
-        <div class="text">Write blog post</div>
+
+      <div class="task-card">
+        <h2>Add New Task</h2>
+        <input type="text" id="title" placeholder="What needs to be done?" />
+        <textarea id="desc" placeholder="Notes (optional)" rows="2"></textarea>
+        <select id="status">
+          <option value="todo">To-Do</option>
+          <option value="progress">In Progress</option>
+          <option value="done">Completed</option>
+        </select>
+        <button class="btn-primary" onclick="addTask()">+ Create Task</button>
       </div>
-      <div class="task-item">
-        <div class="circle"></div>
-        <div class="text">Update website</div>
+
+      <div class="grid">
+        <div class="column todo"><h3>📌 To-Do</h3><div id="todo" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
+        <div class="column progress"><h3>🔄 In Progress</h3><div id="progress" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
+        <div class="column done"><h3>✅ Done</h3><div id="done" class="dropzone" ondrop="drop(event)" ondragover="allowDrop(event)"></div></div>
       </div>
-      <div class="task-item">
-        <div class="circle"></div>
-        <div class="text">Plan team meeting</div>
-      </div>
-      <div class="add-task">+ Add Task</div>
     </div>
   </div>
+
+  <script>
+    const API_URL = 'http://10.0.0.12:3000/api/auth';
+
+    async function signup() {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('pass').value;
+      const msg = document.getElementById('msg');
+
+      if (!email || !pass) {
+        msg.style.color = '#ef4444';
+        msg.textContent = 'Please fill both fields';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: pass })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          msg.style.color = '#10b981';
+          msg.textContent = data.message;
+          localStorage.setItem('current_user', email);
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          msg.style.color = '#ef4444';
+          msg.textContent = data.error;
+        }
+      } catch (err) {
+        msg.style.color = '#ef4444';
+        msg.textContent = 'Server error — check backend is running';
+      }
+    }
+
+    async function login() {
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('pass').value;
+      const msg = document.getElementById('msg');
+
+      if (!email || !pass) {
+        msg.style.color = '#ef4444';
+        msg.textContent = 'Please fill both fields';
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_URL}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password: pass })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          msg.style.color = '#10b981';
+          msg.textContent = data.message;
+          localStorage.setItem('current_user', email);
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          msg.style.color = '#ef4444';
+          msg.textContent = data.error;
+        }
+      } catch (err) {
+        msg.style.color = '#ef4444';
+        msg.textContent = 'Server error — check backend is running';
+      }
+    }
+
+    if (localStorage.getItem('current_user')) {
+      document.getElementById('auth').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      document.getElementById('user-display').innerHTML = `Logged in as <strong>${localStorage.getItem('current_user')}</strong>`;
+      renderTasks();
+    }
+
+    function logout() {
+      localStorage.removeItem('current_user');
+      location.reload();
+    }
+
+    // Your existing task code (addTask, deleteTask, renderTasks, drag-and-drop)
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+    function addTask() {
+      const title = document.getElementById('title').value.trim();
+      const desc = document.getElementById('desc').value;
+      const status = document.getElementById('status').value;
+      if (!title) return;
+      tasks.push({ id: Date.now(), title, desc, status });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      document.getElementById('title').value = '';
+      document.getElementById('desc').value = '';
+      renderTasks();
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    function renderTasks() {
+      ['todo','progress','done'].forEach(s => document.getElementById(s).innerHTML = '');
+      tasks.forEach(t => {
+        const div = document.createElement('div');
+        div.className = `task ${t.status}`;
+        div.draggable = true;
+        div.id = 'task-' + t.id;
+        div.ondragstart = e => e.dataTransfer.setData('text/plain', t.id);
+        div.innerHTML = `
+          <strong>${t.title}</strong><br>
+          <small>${t.desc || ''}</small>
+          <button class="btn-delete" onclick="deleteTask(${t.id})">Delete</button>
+        `;
+        document.getElementById(t.status).appendChild(div);
+      });
+    }
+
+    function allowDrop(e) { e.preventDefault(); }
+
+    function drop(e) {
+      e.preventDefault();
+      const id = parseInt(e.dataTransfer.getData('text/plain'));
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.status = e.target.closest('.column').querySelector('.dropzone').id;
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        renderTasks();
+      }
+    }
+  </script>
 </body>
 </html>
